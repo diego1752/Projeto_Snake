@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QLCDNumber>
 #include "board.h"
+#include <QProgressBar>
 
 class windows:public QWidget
 {
@@ -21,6 +22,7 @@ public:
     QVBoxLayout *qvb;
     QLCDNumber *lcdFase;
     QLCDNumber *lcdPontos;
+    QProgressBar *barra;
     int Tela1;
 public slots:
     void tela(int,int);
