@@ -7,7 +7,6 @@
 #include <QPainter>
 #include <QTimer>
 #include <QTimerEvent>
-#include <QProgressBar>
 
 class board : public QFrame
 {
@@ -26,7 +25,7 @@ signals:
     void tela2(int,int);
     void end();
 private:
-    int x,y,locomocao,move,fase,length,fx,fy,pontos,hs,fr,chnglen,progress;
+    int x,y,locomocao,move,fase,length,fx,fy,pontos,hs,fr,chnglen;
     bool isStarted,isChanged;
 
     QBasicTimer timer;
@@ -43,7 +42,6 @@ private:
 
     void end_game();
     int lowesthighscore();
-
 
     QVector<QVector<QString> > qvscores;
 };

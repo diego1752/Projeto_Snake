@@ -10,14 +10,13 @@ windows::windows(QWidget *parent)
     lcdPontos = new QLCDNumber(this);
     Fase = new QLabel("Nivel:",this);
     Pontos = new QLabel("Pontos:",this);
-    barra = new QProgressBar;
 
 
     this->setMaximumSize(500,300);
-    this->setMinimumSize(100,500);
+    this->setMinimumSize(500,100);
 
-    Tela->setMinimumSize(350,101);
-    Tela->setMaximumSize(350,500);
+    Tela->setMinimumSize(201,201);
+    Tela->setMaximumSize(201,201);
     Inicio->setMinimumWidth(50);
     Inicio->setMaximumWidth(100);
     lcdFase->setMinimumWidth(50);
@@ -29,9 +28,6 @@ windows::windows(QWidget *parent)
     Pontos->setMinimumWidth(80);
     Pontos->setMaximumWidth(120);
 
-    barra->setMinimumWidth(100);
-    barra->setMaximumWidth(250);
-
     qvb->addWidget(Fase);
     qvb->addWidget(lcdFase);
     qvb->addWidget(Pontos);
@@ -39,11 +35,8 @@ windows::windows(QWidget *parent)
     qhb->addWidget(Tela);
     qhb->addLayout(qvb);
     qvb->addWidget(Inicio);
-    qvb->addWidget(barra);
     this->setLayout(qhb);
     connect(Inicio,SIGNAL(clicked()),Tela,SLOT(start()));
-
-
 }
 
 void windows::tela(int i,int j){

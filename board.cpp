@@ -16,7 +16,6 @@ void board::start(){
     isChanged=true;
     x=10;
     y=10;
-   // progress=0;
     length=1;
     fase = 1;
     locomocao=4;
@@ -37,12 +36,11 @@ void board::movey(int j){
 void board::paintEvent(QPaintEvent *event){
     QPainter painter(this);
     painter.setBrush(QColor(255, 255, 255, 255));
-    painter.drawRect(QRect(0,0,300,450));
+    painter.drawRect(QRect(0,0,200,200));
     if(isStarted==true){
 
         painter.setBrush(QColor(255, 0, 0, 255));
-        painter.drawEllipse(QRect(fx,fy,move,move));
-        painter.setBrush(QColor(0, 255, 0, 120));
+        painter.drawRect(QRect(fx,fy,move,move));
         for(int i=0;i<qvtail.size();i++)
             painter.drawRect(QRect(qvtail[i][0],qvtail[i][1],move,move));
     }
@@ -98,23 +96,22 @@ void board::timerEvent(QTimerEvent *event)
             return;
         }
         if(x<0)
-            x=300-move;
-        if(x>300-move)
+            x=200-move;
+        if(x>200-move)
             x=0;
         if(y<0)
-            y=450-move;
-        if(y>450-move)
+            y=200-move;
+        if(y>200-move)
             y=0;
         if(fx==x && fy==y){
             genfood();
             length++;
-            //QProgressBar::QProgressBar(*pontos);
             pontos+=fase*10;
-
 
             // aqui é o nível
             if(length%chnglen==0){
                 fase++;
+                //length=1;
                 timer.stop();
                 timer.start(timeoutTime(), this);
             }
@@ -165,8 +162,6 @@ int board::lowesthighscore(){
     fl.close();
     return qvscores.size();
 }
-
-
 
 
 
