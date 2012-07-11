@@ -3,7 +3,7 @@
 
 board::board(QWidget *parent)
 {
-    chnglen=10;
+    chnglen=11;
     move=10;
     isStarted=false;
     setFrameStyle(QFrame::Raised | QFrame::StyledPanel);
@@ -95,7 +95,7 @@ void board::timerEvent(QTimerEvent *event)
             break;
         }
         if(check_snake()and vidas==0){
-            QMessageBox::information(this,"PROJETO SNAKE","GAMER OVER!");
+            QMessageBox::information(this,"SNAKE","GAME OVER!");
             end_game();
             return;
         }
@@ -110,7 +110,7 @@ void board::timerEvent(QTimerEvent *event)
         if(fx==x && fy==y){
             genfood();
             length++;
-            pontos+=fase*10;
+            pontos=pontos+100;
 
 
             // aqui é o nível
