@@ -3,25 +3,27 @@
 
 board::board(QWidget *parent)
 {
-    chnglen=11;
+    //Tamanho da Maça e da Cobra
+    chnglen=10;
     move=10;
-    isStarted=false;
-    setFrameStyle(QFrame::Raised | QFrame::StyledPanel);
-    setFocusPolicy(Qt::StrongFocus);
-    connect(this,SIGNAL(tela2(int,int)),parent,SLOT(tela(int,int)));
-    connect(this,SIGNAL(end()),parent,SLOT(end()));
+    Iniciar=false;
+    QObject::connect(this,SIGNAL(tela2(int,int,int)),parent,SLOT(tela(int,int,int)));
+    QObject::connect(this,SIGNAL(end()),parent,SLOT(end()));
 }
+
 void board::start(){
     this->setFocus();
-    isStarted=true;
-    isChanged=true;
+
+    Iniciar=true;
+    Altera=true;
     x=10;
     y=10;
     length=1;
-    fase = 1;
+    fase=1;
     locomocao=4;
     pontos=0;
     vidas=3;
+
     genfood();
     this->update();
     timer.start(timeoutTime(), this);
@@ -31,15 +33,17 @@ void board::movex(int i){
     x=i;
     this->update();
 }
+
 void board::movey(int j){
     y=-j;
     this->update();
 }
+
 void board::paintEvent(QPaintEvent *event){
     QPainter painter(this);
     painter.setBrush(QColor(255, 255, 255, 255));
-    painter.drawRect(QRect(0,0,300,450));
-    if(isStarted==true){
+    painter.drawRect(QRect(0,0,250,180));
+    if(Iniciar==true){
 
         painter.setBrush(QColor(255, 0, 0, 255));
         painter.drawEllipse(QRect(fx,fy,move,move));
@@ -50,7 +54,7 @@ void board::paintEvent(QPaintEvent *event){
 }
 
 void board::keyPressEvent(QKeyEvent *event){
-    if(isChanged==true){
+    if(Altera==true){
         switch (event->key()) {
         case Qt::Key_Left:
             if(locomocao!=4)
@@ -71,16 +75,18 @@ void board::keyPressEvent(QKeyEvent *event){
         default:
             QFrame::keyPressEvent(event);
         }
-        isChanged=false;
+        Altera=false;
     }
     this->update();
 }
+
 void board::timerEvent(QTimerEvent *event)
 {
     if (event->timerId() == timer.timerId()) {
-        emit(tela2(fase,pontos));
-        isChanged=true;
+        emit(tela2(fase,pontos,vidas));
+        Altera=true;
         switch (locomocao) {
+
         case 1:
             x-=move;
             break;
@@ -100,26 +106,26 @@ void board::timerEvent(QTimerEvent *event)
             return;
         }
         if(x<0)
-            x=300-move;
-        if(x>300-move)
+            x=250-move;
+        if(x>250-move)
             x=0;
         if(y<0)
-            y=450-move;
-        if(y>450-move)
+            y=180-move;
+        if(y>180-move)
             y=0;
         if(fx==x && fy==y){
             genfood();
             length++;
             pontos=pontos+100;
 
+            if(pontos==3000){
+                QMessageBox::information(this,"PROJETO SNAKE","Fim de Jogo. Parabéns! Você completou os Níveis");
+                return end_game();
+            }
 
             // aqui é o nível
-            if(length%chnglen==0){
+            if(length%chnglen==1){
                 fase++;
-                if(fase==4){
-                    QMessageBox::information(this,"PROJETO SNAKE","Fim de Jogo. Parabéns!");
-                    return end_game();
-                }
 
                 timer.stop();
                 timer.start(timeoutTime(), this);
@@ -127,6 +133,7 @@ void board::timerEvent(QTimerEvent *event)
             }
 
         }
+
         this->update();
         qvtemp.clear();
         qvtemp.push_front(y);
@@ -141,18 +148,15 @@ void board::timerEvent(QTimerEvent *event)
 }
 
 void board::genfood(){
-    fx=(qrand()%19)*move;
-    fy=(qrand()%40)*move;
+    fx=(qrand()%18)*move;
+    fy=(qrand()%18)*move;
 }
+
 void board::end_game(){
-    int k=0;
     timer.stop();
-    isStarted=false;
-    k = lowesthighscore();
-    //QMessageBox msgBox;
+    Iniciar=false;
+}
 
-
-  }
 bool board::check_snake(){
     for(int i=0;i<qvtail.size();i++)
         if(qvtail[i][0]==x && qvtail[i][1]==y)
@@ -161,20 +165,10 @@ bool board::check_snake(){
     return 0;
 }
 
-
-int board::lowesthighscore(){
-    QFile fl("test.dat");
-    fl.open(QIODevice::ReadOnly);
-    QDataStream datas(&fl);
-    datas>>qvscores;
-    hs=0;
-    if(qvscores.size()>0)
-        hs=qvscores[qvscores.size()-1][1].toInt();
-    fl.close();
-    return qvscores.size();
+void board::vida(int v){
+    vidas=v;
+    this->update();
 }
-
-
 
 
 

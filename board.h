@@ -22,18 +22,21 @@ protected:
 public slots:
     void movex(int);
     void movey(int);
+    void vida(int);
     void start();
 signals:
-    void tela2(int,int);
+    void tela2(int,int,int);
     void end();
 private:
-    int x,y,locomocao,move,fase,length,fx,fy,pontos,hs,fr,chnglen,barra,vidas;
-    bool isStarted,isChanged;
+    bool Iniciar,Altera;
+    int x,y,locomocao,move,length;
+    int fx,fy,pontos,hs,fr,chnglen;
+    int fase,barra,vidas;
 
-    QBasicTimer timer;
+    QBasicTimer timer;// Velocidade
     int timeoutTime()
     {
-        return 1000 / (3 + 4*fase);
+        return 1000 / (7*fase);
     }
 
     QVector<int> qvtemp;
@@ -41,12 +44,7 @@ private:
 
     void genfood();
     bool check_snake();
-
     void end_game();
-    int lowesthighscore();
-
-
-    QVector<QVector<QString> > qvscores;
 };
 
 #endif // BOARD_H
