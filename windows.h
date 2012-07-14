@@ -17,6 +17,7 @@ public:
     QPushButton *Inicio;
     QLabel *Fase;
     QLabel *Pontos;
+    QLabel *Vidas;
     board *Tela;
     QHBoxLayout *qhb;
     QVBoxLayout *qvb;
@@ -27,7 +28,7 @@ public:
     int Tela1;
 
 public slots:
-    void tela(int,int);
+    void tela(int,int,int);
     void end();
 };
 

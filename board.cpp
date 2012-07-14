@@ -15,7 +15,7 @@ void board::start(){
     this->setFocus();
 
     Iniciar=true;
-    Altera=true;
+    Tecla=true;
     x=10;
     y=10;
     length=1;
@@ -24,7 +24,7 @@ void board::start(){
     pontos=0;
     vidas=3;
 
-    genfood();
+    maca();
     this->update();
     timer.start(timeoutTime(), this);
 }
@@ -35,7 +35,7 @@ void board::movex(int i){
 }
 
 void board::movey(int j){
-    y=-j;
+    y=j;
     this->update();
 }
 
@@ -54,7 +54,7 @@ void board::paintEvent(QPaintEvent *event){
 }
 
 void board::keyPressEvent(QKeyEvent *event){
-    if(Altera==true){
+    if(Tecla==true){
         switch (event->key()) {
         case Qt::Key_Left:
             if(locomocao!=4)
@@ -75,16 +75,15 @@ void board::keyPressEvent(QKeyEvent *event){
         default:
             QFrame::keyPressEvent(event);
         }
-        Altera=false;
+        Tecla=false;
     }
-    this->update();
 }
 
 void board::timerEvent(QTimerEvent *event)
 {
     if (event->timerId() == timer.timerId()) {
         emit(tela2(fase,pontos,vidas));
-        Altera=true;
+        Tecla=true;
         switch (locomocao) {
 
         case 1:
@@ -100,9 +99,9 @@ void board::timerEvent(QTimerEvent *event)
             y-=move;
             break;
         }
-        if(check_snake()and vidas==0){
+        if(bate_cobra()and vidas==0){
             QMessageBox::information(this,"SNAKE","GAME OVER!");
-            end_game();
+            fim_jogo();
             return;
         }
         if(x<0)
@@ -114,16 +113,17 @@ void board::timerEvent(QTimerEvent *event)
         if(y>180-move)
             y=0;
         if(fx==x && fy==y){
-            genfood();
+            maca();
             length++;
             pontos=pontos+100;
 
             if(pontos==3000){
                 QMessageBox::information(this,"PROJETO SNAKE","Fim de Jogo. Parabéns! Você completou os Níveis");
-                return end_game();
+                return fim_jogo();
+                this->update();
             }
 
-            // aqui é o nível
+
             if(length%chnglen==1){
                 fase++;
 
@@ -147,17 +147,17 @@ void board::timerEvent(QTimerEvent *event)
     }
 }
 
-void board::genfood(){
+void board::maca(){
     fx=(qrand()%18)*move;
     fy=(qrand()%18)*move;
 }
 
-void board::end_game(){
+void board::fim_jogo(){
     timer.stop();
     Iniciar=false;
 }
 
-bool board::check_snake(){
+bool board::bate_cobra(){
     for(int i=0;i<qvtail.size();i++)
         if(qvtail[i][0]==x && qvtail[i][1]==y)
             vidas=vidas-1;

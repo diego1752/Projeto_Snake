@@ -28,12 +28,12 @@ signals:
     void tela2(int,int,int);
     void end();
 private:
-    bool Iniciar,Altera;
+    bool Iniciar,Tecla;
     int x,y,locomocao,move,length;
     int fx,fy,pontos,hs,fr,chnglen;
     int fase,barra,vidas;
 
-    QBasicTimer timer;// Velocidade
+    QBasicTimer timer;
     int timeoutTime()
     {
         return 1000 / (7*fase);
@@ -42,9 +42,9 @@ private:
     QVector<int> qvtemp;
     QVector<QVector<int> > qvtail;
 
-    void genfood();
-    bool check_snake();
-    void end_game();
+    void maca();
+    bool bate_cobra();
+    void fim_jogo();
 };
 
 #endif // BOARD_H
